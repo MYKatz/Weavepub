@@ -68,8 +68,6 @@
   
   .shards-app-promo-page--1 .welcome {
     position: relative;
-    height: 60vh;
-    min-height: 700px;
     background: url("../images/app-promo/welcome-cover.jpg") no-repeat center center fixed;
     background-size: cover;
   }
