@@ -1,5 +1,3 @@
-
-
 Vue.component('UploadForm', {
     template: `
         <form class="upload-paper" @keydown.enter.capture.prevent @submit.prevent="submitForm">
