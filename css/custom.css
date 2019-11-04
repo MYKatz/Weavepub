@@ -5,6 +5,29 @@
     height: 3.5rem;
 }
 
+.page-search {
+    background-color: rgba(0,0,0,.4);
+    color: #fff;
+    border-radius: 30px;
+    height: 2.5rem;
+    border-radius: 0px 30px 30px 0px;
+}
+
+.searchpage-formitem {
+    display: inline-block;
+}
+
+.page-search::placeholder {
+    color: #fff;
+}
+
+.page-search:focus {
+    background-color: rgba(0,0,0,.4);
+    color: #fff;
+    border-radius: 0px 30px 30px 0px;
+    height: 2.5rem;
+}
+
 .card-authors {
     font-size: 0.8rem;
     color: grey;
