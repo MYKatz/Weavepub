@@ -4,7 +4,7 @@ Vue.component('UploadForm', {
     template: `
         <form class="upload-paper" @keydown.enter.capture.prevent @submit.prevent="submitForm">
             <h3>Title</h3>
-            <input v-model="title" required/><br />
+            <input v-model="title" required class="paper-title" type="text"/><br />
             <hr/>
             <h3>Abstract</h3>
             <textarea v-model="abstract" required/><br/>
