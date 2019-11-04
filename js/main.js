@@ -20,6 +20,7 @@ var router = new VueRouter({
         { path: '/upload', component: { template: '<div><navigation-menu activePage="recent"></navigation-menu><upload-form></upload-form><footer-bar></footer-bar></div>' } },
         { path: '/recent', component: { template: '<div><navigation-menu activePage="recent"></navigation-menu><paper-viewer></paper-viewer><footer-bar></footer-bar></div>' } },
         { path: '/search', component: { template: '<div><navigation-menu activePage="browse"></navigation-menu><searchpage></searchpage><footer-bar></footer-bar></div>' } },
+        { path: '/paper/:txid', props: true, component: paperpage }
 
     ]
 });

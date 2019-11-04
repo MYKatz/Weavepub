@@ -2,7 +2,7 @@ Vue.component('NavigationMenu', {
     template: `<div class="welcome d-flex justify-content-center flex-column">
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-dark pt-4 px-0">
-                <a class="navbar-brand mr-5" href="#">
+                <a class="navbar-brand mr-5" href="#" @click.prevent="$router.push('home')">
                     <img src="images/logo.svg" class="mr-2 nav-brand" alt="Shards - Agency Landing Page">
                     Weavepub
                 </a>

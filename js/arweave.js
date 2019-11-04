@@ -16,17 +16,27 @@ async function searchPapers(type, query) {
     }
 }
 
-async function processPasteFromId(txid) {
+async function processPaperFromId(txid) {
+    const arweave = Arweave.init({
+        host: 'arweave.net',// Hostname or IP address for a Arweave host
+        port: 443,          // Port
+        protocol: 'https',  // Network protocol http or https
+        timeout: 20000,     // Network request timeouts in milliseconds
+        logging: false,     // Enable network request logging
+    });
     var transaction = await arweave.transactions.get(txid);
     var tags = {};
+    console.log(transaction.get("owner", { decode: true, string: true }));
     transaction.get("tags").forEach((tag) => {
         let key = tag.get("name", { decode: true, string: true });
         let value = tag.get("value", { decode: true, string: true });
         tags[key] = value;
     });
+    console.log(tags);
     return tags;
 }
 
+/*
 filechoose.onchange = function (e) {
     var filelist = filechoose.files;
     if (filelist) {
@@ -54,3 +64,5 @@ function login(files, fileLoadCallback) {
 
     reader.readAsText(files[0]);
 }
+
+*/
