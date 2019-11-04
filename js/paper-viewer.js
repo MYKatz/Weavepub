@@ -13,10 +13,10 @@ Vue.component('Paper', {
     `,
     props: ['title', 'authors', 'abstract'],
     computed: {
-        authorsAsString: function() {
+        authorsAsString: function () {
             return this.authors.join(", ");
         },
-        shortAbstract: function() {
+        shortAbstract: function () {
             return this.abstract.length >= 200 ? this.abstract.slice(0, 200) + "..." : this.abstract;
         }
     }
@@ -26,7 +26,7 @@ Vue.component('PaperViewer', {
     template: `
     <div class="paper-viewer">
         <div class="blog section section-invert py-4">
-        <h3 class="section-title text-center m-5">Latest Papers</h3>
+        <h3 class="section-title text-center m-5" v-if="!hideTitle">Latest Papers</h3>
         <div class="container">
             <div class="py-4">
                 <div class="row">
@@ -39,7 +39,7 @@ Vue.component('PaperViewer', {
         </div>
     </div>
     `,
-    data: function() {
+    data: function () {
         var obj = {};
         obj.papers = [];
         for (let i = 0; i < 6; ++i) {
@@ -52,5 +52,6 @@ Vue.component('PaperViewer', {
             });
         }
         return obj;
-    }
+    },
+    props: ["hideTitle"]
 });

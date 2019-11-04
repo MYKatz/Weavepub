@@ -37,15 +37,15 @@ Vue.component('UploadForm', {
             </div>
         </form>
     `,
-    data: function() {
+    data: function () {
         return {
             title: '',
             abstract: '',
-            subject: {display: ''},
+            subject: { display: '' },
             allSubjects: [
-                {id: 1, name: 'Mathematics'},
-                {id: 2, name: 'Physics'},
-                {id: 3, name: 'Astrobiology'}
+                { id: 1, name: 'Mathematics' },
+                { id: 2, name: 'Physics' },
+                { id: 3, name: 'Astrobiology' }
             ],
             uploadProgress: 0
         };
@@ -53,10 +53,10 @@ Vue.component('UploadForm', {
     computed: {
     },
     methods: {
-        selectSubject: function(v) {
+        selectSubject: function (v) {
             this.subject = v;
         },
-        submitForm: function() {
+        submitForm: function () {
             console.log("Uploading stuff with title", this.title, "abstract", this.abstract, "subject", this.subject, "and file", this.$refs.pdfUpload.files);
             var seconds = 0, dt = 1, totalUploadTime = 15 * 60, padding = 1000;
             var interval = setInterval(() => {
@@ -76,6 +76,6 @@ Vue.component('UploadForm', {
         }
     },
     components: {
-        Autocomplete:  window["vuejs-autocomplete"]
+        Autocomplete: window["vuejs-autocomplete"]
     }
 });
