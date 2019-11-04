@@ -1,5 +1,12 @@
 var filechoose = document.getElementById("keychoose");
 
+const arweave = Arweave.init({
+    host: 'arweave.net',// Hostname or IP address for a Arweave host
+    port: 443,          // Port
+    protocol: 'https',  // Network protocol http or https
+    timeout: 20000,     // Network request timeouts in milliseconds
+    logging: false,     // Enable network request logging
+});
 
 async function searchPapers(type, query) {
     const txids = await arweave.arql({
@@ -36,7 +43,7 @@ async function processPaperFromId(txid) {
     return tags;
 }
 
-/*
+
 filechoose.onchange = function (e) {
     var filelist = filechoose.files;
     if (filelist) {
@@ -45,10 +52,12 @@ filechoose.onchange = function (e) {
                 wallet = JSON.parse(ev.target.result);
 
                 arweave.wallets.jwkToAddress(wallet).then((address) => {
-                    //do something with the state here
+                    localStorage.setItem('wallet', JSON.stringify(wallet));
+                    $("#exampleModal").modal("toggle");
                 });
             } catch (err) {
                 alert("Error logging in. Please try again.");
+                alert(err);
                 filechoose.value = "";
                 success = false;
             } finally {
@@ -65,4 +74,3 @@ function login(files, fileLoadCallback) {
     reader.readAsText(files[0]);
 }
 
-*/
