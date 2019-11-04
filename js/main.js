@@ -24,6 +24,9 @@ var router = new VueRouter({
             props: ['searchType'],
                 template: '<div><navigation-menu activePage="browse"></navigation-menu><searchpage :searchType="searchType"></searchpage><footer-bar></footer-bar></div>'
             }, props: true},
+	{ path: '/paper/:txid', props: true, component: paperpage }
+
+
 
     ]
 });
