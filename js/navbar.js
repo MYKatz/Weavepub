@@ -13,7 +13,7 @@ Vue.component('NavigationMenu', {
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav">
                         <li class="nav-item" :class="{active: activePage == 'home'}">
-                            <a class="nav-link" href="#" @click.prevent="$router.push('home')">Home</a>
+                            <a class="nav-link" href="#" @click.prevent="$router.push('/home')">Home</a>
                         </li>
                         <li class="nav-item dropdown" :class="{active: activePage == 'browse'}">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -21,21 +21,22 @@ Vue.component('NavigationMenu', {
                                 Browse
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#" @click.prevent="$router.push({path: 'search', params: {}})">By author</a>
-                                <a class="dropdown-item" href="#" @click.prevent="$router.push({path: 'search', params: {}})">By subject</a>
-                                <a class="dropdown-item" href="#" @click.prevent="$router.push({path: 'search', params: {}})">By publisher</a>
+                                <a class="dropdown-item" href="#" @click.prevent="$router.push({path: '/search/contents'})">By keywords</a>
+                                <a class="dropdown-item" href="#" @click.prevent="$router.push({path: '/search/author'})">By author</a>
+                                <a class="dropdown-item" href="#" @click.prevent="$router.push({path: '/search/subject'})">By subject</a>
+                                <a class="dropdown-item" href="#" @click.prevent="$router.push({path: '/search/publisher'})">By publisher</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Advanced search</a>
+                                <a class="dropdown-item" href="#" @click.prevent="$router.push({path: '/search/advanced'})">Advanced search</a>
                             </div>
                         </li>
                         <li class="nav-item" :class="{active: activePage == 'recent'}">
-                            <a class="nav-link" href="#recentPages" @click.prevent="$router.push('recent')">Recent</a>
+                            <a class="nav-link" href="#recentPages" @click.prevent="$router.push('/recent')">Recent</a>
                         </li>
-                        <li class="nav-item" :class="{active: activePage == 'mypapers'}">
-                            <a class="nav-link" href="#" @click.prevent="$router.push('mypapers')">My papers</a>
+                        <li class="nav-item" :class="{active: activePage == 'mypapers'}" v-if="loggedIn">
+                            <a class="nav-link" href="#" @click.prevent="$router.push('/mypapers')">My papers</a>
                         </li>
                         <li class="nav-item" :class="{active: activePage == 'upload'}" v-if="loggedIn">
-                            <a class="nav-link" href="#" @click.prevent="$router.push('upload')">Upload</a>
+                            <a class="nav-link" href="#" @click.prevent="$router.push('/upload')">Upload</a>
                         </li>
                     </ul>
                     <div class="form-inline ml-auto" v-if="!loggedIn">
