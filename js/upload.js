@@ -1,5 +1,7 @@
 Vue.component('UploadForm', {
     template: `
+    <div class="container-fluid" style="background: #F9FAFC">
+    <div class="container">
         <form class="upload-paper" @keydown.enter.capture.prevent @submit.prevent="submitForm">
             <h3>Title</h3>
             <input v-model="title" required class="paper-title" type="text"/><br />
@@ -36,6 +38,8 @@ Vue.component('UploadForm', {
             </button>
             </div>
         </form>
+    </div>
+    </div>
     `,
     data: function () {
         return {
