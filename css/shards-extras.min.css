@@ -1,6 +1,5 @@
 .shards-landing-page--1 .welcome {
     position: relative;
-    background: url("../images/agency-landing/welcome-cover.jpg") no-repeat center center fixed;
     background-size: cover;
   }
   
@@ -68,7 +67,6 @@
   
   .shards-app-promo-page--1 .welcome {
     position: relative;
-    background: url("../images/app-promo/welcome-cover.jpg") no-repeat center center fixed;
     background-size: cover;
   }
   
