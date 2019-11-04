@@ -54,6 +54,7 @@ filechoose.onchange = function (e) {
                 arweave.wallets.jwkToAddress(wallet).then((address) => {
                     localStorage.setItem('wallet', JSON.stringify(wallet));
                     $("#exampleModal").modal("toggle");
+                    location.reload();
                 });
             } catch (err) {
                 alert("Error logging in. Please try again.");

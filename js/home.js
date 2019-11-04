@@ -12,16 +12,17 @@ Vue.component('homepage', {
         <div class="inner-wrapper mt-auto mb-auto container">
             <div class="row">
                 <div class="col-12 mt-auto mb-auto mr-3" style="text-align: center">
-                    <h1 class="welcome-heading display-4 text-white">Search papers</h1>
+                    <h1 class="welcome-heading display-4 text-white">Search Papers</h1>
                     <p class="text-muted">Free, creative commons-licensed papers await you!
                     </p>
-                    <form @submit.prevent>
+                    <form @submit.prevent="doSearch">
                     <input required class="form-control border-0 mr-3 mb-2 mr-sm-0 landing-search my-5" type="text"
-                        placeholder="Search query">
-                    <button
+                        placeholder="Search query" ref="searchVal">
+                    <button type="submit"
                         class="btn btn-lg btn-success btn-pill align-self-center">
                         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMTYgMTYiPgogIDxnPgogICAgPHBhdGggc3Ryb2tlPSIjOTk5IiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgZmlsbD0ibm9uZSIgZD0iTTExIDExbDMuNSAzLjUiPjwvcGF0aD4KICAgIDxjaXJjbGUgc3Ryb2tlPSIjOTk5IiBzdHJva2Utd2lkdGg9IjIiIGN4PSI2LjUiIGN5PSI2LjUiIHI9IjUuNSIgZmlsbD0ibm9uZSI+PC9jaXJjbGU+CiAgPC9nPgo8L3N2Zz4K" class="autocomplete__icon">
-                        Search</button>
+                        Search
+                        </button>
                      </form>
 
                 </div>
@@ -35,9 +36,14 @@ Vue.component('homepage', {
         <footer-bar></footer-bar>
     </div>
     `,
-    data: function() {
+    data: function () {
         return {
             loggedIn: true
+        }
+    },
+    methods: {
+        doSearch: function () {
+            this.$router.push({ path: '/search/contents/' + this.$refs.searchVal.value });
         }
     }
 });

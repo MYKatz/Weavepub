@@ -47,5 +47,13 @@ Vue.component('NavigationMenu', {
             </nav>
         </div>
     </div>`,
-    props: ['activePage', 'loggedIn']
+    props: ['activePage'],
+    data: function () {
+        return {
+            loggedIn: false
+        }
+    },
+    mounted: function () {
+        this.loggedIn = Boolean(localStorage.wallet);
+    }
 });

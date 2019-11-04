@@ -10,15 +10,15 @@ Vue.component('SingleSearchBar', {
             </select>
             <input class="form-control border-0 mr-3 mb-2 mr-sm-0 page-search my-3 searchpage-formitem" type="text"
                     :placeholder="!isAdvanced ? 'Search query' : 'Search query (leave blank for no filter)'" style="width: 79%"
-                    @input="$emit('input', $event.target.value)" v-model="value">
+                    @input="$emit('input', $event.target.value)" v-model="searchVal">
         </div>
     `,
-    data: function() { return {value: '', chosenSearchType: ''} },
-    props: ['initSearchType', 'isAdvanced'],
+    data: function () { return { value: '', chosenSearchType: '', searchVal: this.initValue } },
+    props: ['initSearchType', 'isAdvanced', 'initValue'],
     computed: {
         searchType: {
-            get: function() { return this.chosenSearchType || this.initSearchType; },
-            set: function(v) { this.chosenSearchType = v; }
+            get: function () { return this.chosenSearchType || this.initSearchType; },
+            set: function (v) { this.chosenSearchType = v; }
         }
     }
 });
@@ -29,11 +29,12 @@ Vue.component('searchpage', {
         <div class="blog section section-invert py-4 section-title">
             <h3 class="text-center m-5">Search papers</h3>
             <form @submit.prevent="doSearch">
-            <single-search-bar :initSearchType="searchType" v-if="searchType !== 'advanced'" ref="singleFilter"></single-search-bar>
+            <single-search-bar :initSearchType="searchType" v-if="searchType !== 'advanced'" ref="singleFilter" :initValue="searchQuery"></single-search-bar>
             <template v-else>
                 <single-search-bar v-for="searchType in allSearchTypes"
                     :initSearchType="searchType" :isAdvanced="true" :key="searchType" @input="$set(filters, searchType, $event)"></single-search-bar>
             </template>
+            <button type="submit" style="display: none;">submit</button>
             </form>
         </div>
         <div>
@@ -55,9 +56,14 @@ Vue.component('searchpage', {
             allSearchTypes: ['contents', 'author', 'subject', 'publisher']
         }
     },
-    props: ['searchType'],
+    props: ['searchType', 'searchQuery'],
+    mounted: function () {
+        if (this.searchQuery) {
+            console.log(this.searchQuery);
+        }
+    },
     methods: {
-        doSearch: function() {
+        doSearch: function () {
             if (this.searchType !== 'advanced') {
                 let singleFilter = this.$refs.singleFilter;
                 let obj = {};
