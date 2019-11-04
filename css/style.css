@@ -2,14 +2,20 @@
     margin: 0 20vw;
     padding: 0 5vw;
     background-color: #f1f1f1;
+    min-height: 100vh;
+    padding-top: 5vh;
 }
 
-.upload-paper input, .upload-paper textarea {
+.upload-paper input[type=text], .upload-paper textarea {
     width: 100%;
 }
 
 .upload-paper textarea {
     height: 10rem;
+}
+
+.upload-paper div.submit {
+    margin-top: 10px;
 }
 
 .autocomplete input[type=text] {
