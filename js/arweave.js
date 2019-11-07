@@ -33,7 +33,7 @@ async function processPaperFromId(txid) {
     });
     var transaction = await arweave.transactions.get(txid);
     var tags = {};
-    console.log(transaction.get("owner", { decode: true, string: true }));
+    tags["owner"] = await arweave.wallets.ownerToAddress(transaction.owner);
     transaction.get("tags").forEach((tag) => {
         let key = tag.get("name", { decode: true, string: true });
         let value = tag.get("value", { decode: true, string: true });
@@ -73,5 +73,23 @@ function login(files, fileLoadCallback) {
     reader.onload = fileLoadCallback;
 
     reader.readAsText(files[0]);
+}
+
+async function uploadFile(title, abstract, subject, filedata) {
+    let transaction = await arweave.createTransaction({
+        data: filedata
+    }, localStorage.wallet);
+
+    transaction.addTag("app", "Weavepub");
+    transaction.addTag("created", new Date().getTime());
+    transaction.addTag("title", title);
+    transaction.addTag("abstract", abstract);
+    transaction.addTag("subject", subject);
+
+    await arweave.transactions.sign(transaction, localStorage.wallet);
+    const response = await arweave.transactions.post(transaction);
+
+    console("resp: ", response);
+    return response;
 }
 

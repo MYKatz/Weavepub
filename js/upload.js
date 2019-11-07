@@ -31,7 +31,7 @@ Vue.component('UploadForm', {
             </span>
             </template>
             <button v-if="uploadProgress >= 100" class="btn btn-success" @click.prevent>
-                Successfully uploaded! Click to go back home
+                Successfully uploaded! Your file will be included in the next block (may take ~10 mins). Click to go back home
             </button>
             <button v-if="uploadProgress < 0" class="btn btn-danger">
                 Upload failed. Click to retry.
@@ -60,23 +60,35 @@ Vue.component('UploadForm', {
         selectSubject: function (v) {
             this.subject = v;
         },
-        submitForm: function () {
-            console.log("Uploading stuff with title", this.title, "abstract", this.abstract, "subject", this.subject, "and file", this.$refs.pdfUpload.files);
-            var seconds = 0, dt = 1, totalUploadTime = 15 * 60, padding = 1000;
-            var interval = setInterval(() => {
-                seconds += dt;
-                if (seconds <= totalUploadTime) {
-                    this.uploadProgress = seconds / (totalUploadTime + padding) * 100;
-                } else {
-                    let decay = 1 / padding;
-                    let totalDecay = 1 - Math.exp(-decay * (seconds - totalUploadTime));
-                    this.uploadProgress = (totalUploadTime + padding * totalDecay) / (totalUploadTime + padding) * 100;
-                }
-            }, dt * 1000);
-            new Promise((resolve) => setTimeout(resolve, 1000, "Done!")).then(() => {
-                clearInterval(interval);
-                this.uploadProgress = 100;
-            });
+        submitForm: async function () {
+            if (!localStorage.wallet) {
+                alert("You're not logged in! Please return home and try again.");
+            }
+            console.log("Uploading stuff with title", this.title, "abstract", this.abstract, "subject", this.subject.selectedObject.name, "and file", this.$refs.pdfUpload.files[0]);
+            const reader = new FileReader();
+            reader.onload = async function () {
+                const file_data = new Uint8Array(reader.result)
+                console.log(file_data);
+                //send arweave transaction
+                await uploadFile(this.title, this.abstract, this.subject.selectedObject.name, file_data);
+
+                var seconds = 0, dt = 1, totalUploadTime = 15 * 60, padding = 1000;
+                var interval = setInterval(() => {
+                    seconds += dt;
+                    if (seconds <= totalUploadTime) {
+                        this.uploadProgress = seconds / (totalUploadTime + padding) * 100;
+                    } else {
+                        let decay = 1 / padding;
+                        let totalDecay = 1 - Math.exp(-decay * (seconds - totalUploadTime));
+                        this.uploadProgress = (totalUploadTime + padding * totalDecay) / (totalUploadTime + padding) * 100;
+                    }
+                }, dt * 1000);
+                new Promise((resolve) => setTimeout(resolve, 1000, "Done!")).then(() => {
+                    clearInterval(interval);
+                    this.uploadProgress = 100;
+                });
+            }
+            reader.readAsArrayBuffer(this.$refs.pdfUpload.files[0]);
         }
     },
     components: {
