@@ -16,22 +16,15 @@ const papersCached = (async function() {
     });
     let out = [];
     for (let txid of txids) {
-        out.push(await processPaperFromId(txid));
+        out.push(await getTagsFromId(txid));
     }
     return out;
 })();
 
 async function searchPapers(types, queries) {
-    const txids = await arweave.arql({
-        op: "equals",
-        expr1: "Application-ID",
-        expr2: "WeavePub"
-    });
-
-    out = [];
-    for (var i = 0; i < txids.length; i++) {
-        var tags = await getTagsFromId(txids[i]);
-        for (var j = 0; j < types.length; j++) {
+    var out = [], papers = await papersCached;
+    for (let tags of papers) {
+        for (let j = 0; j < types.length; j++) {
             console.log(types[j]);
             console.log(tags);
             if (tags[types[j]] && tags[types[j]].toLowerCase().indexOf(queries[j].toLowerCase()) !== -1) {
@@ -45,16 +38,8 @@ async function searchPapers(types, queries) {
 }
 
 async function searchRecent() {
-    const txids = await arweave.arql({
-        op: "equals",
-        expr1: "Application-ID",
-        expr2: "WeavePub"
-    });
-    out = [];
-    for (var i = 0; i < txids.length; i++) {
-        var tags = await getTagsFromId(txids[i]);
-        out.push(tags);
-    }
+    let papers = await papersCached;
+    let out = papers.slice();
     out.sort(compare);
     return out;
 }
