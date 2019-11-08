@@ -17,7 +17,7 @@ async function searchPapers(types, querys) {
 
     out = [];
     for (var i = 0; i < txids.length; i++) {
-        var tags = processPasteFromId(txids[0]);
+        var tags = processPaperFromId(txids[0]);
         for (var j = 0; j < types.length; j++) {
             if (tags[type].indexOf(query) != -1) {
                 //valid! do something here
@@ -32,13 +32,23 @@ async function searchRecent() {
         expr1: "Application-ID",
         expr2: "WeavePub"
     });
-    return txids;
     out = [];
     for (var i = 0; i < txids.length; i++) {
-        var tags = processPasteFromId(txids[0]);
+        var tags = processPaperFromId(txids[0]);
         out.push(tags);
     }
-    return tags;
+    //out.sort(compare);
+    return out;
+}
+
+function compare(o1, o2) {
+    if (o1.created && o2.created) {
+        if (o1.created > o2.created) {
+            return 1;
+        }
+        return -1;
+    }
+    return 0;
 }
 
 async function getMyPapers() {
@@ -60,7 +70,7 @@ async function getMyPapers() {
             }
         });
         for (var i = 0; i < txids.length; i++) {
-            var tags = processPasteFromId(txids[0]);
+            var tags = processPaperFromId(txids[0]);
             out.push(tags);
         }
     }

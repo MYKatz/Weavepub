@@ -79,7 +79,8 @@ Vue.component('UploadForm', {
                 //send arweave transaction
                 await uploadFile(this.title, this.abstract, subject, file_data);
 
-                var seconds = 0, dt = 1, totalUploadTime = 15 * 60, padding = 1000;
+                this.uploadProgress = 101;/*  */
+                /* var seconds = 0, dt = 1, totalUploadTime = 15 * 60, padding = 1000;
                 var interval = setInterval(() => {
                     seconds += dt;
                     if (seconds <= totalUploadTime) {
@@ -93,7 +94,7 @@ Vue.component('UploadForm', {
                 new Promise((resolve) => setTimeout(resolve, 1000, "Done!")).then(() => {
                     clearInterval(interval);
                     this.uploadProgress = 100;
-                });
+                }); */
             }
             reader.readAsDataURL(this.$refs.pdfUpload.files[0]);
         }
