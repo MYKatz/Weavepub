@@ -116,14 +116,18 @@ Vue.component('PaperViewer', {
                     let mine = await getMyPapers();
                     this.papers = mine;
                 }
-                this.noResultsFound = this.papers.length === 0;
+
+                if (newValue !== 'search') {
+                    this.noResultsFound = this.papers.length === 0; // noresultsfound is already set by searchQ
+                }
             }
         },
         searchQ: {
+            immediate: true,
             handler: async function (newValue) {
-                this.papers = [];
-                console.log(newValue["queries"], newValue["types"]);
-                this.papers = await searchPapers(newValue["types"], newValue["queries"]);
+                if (this.loadPapersFrom !== 'search') return;
+                this.papers = await searchPapers(newValue);
+                console.log(newValue, this.papers);
                 this.noResultsFound = this.papers.length === 0;
             }
         }

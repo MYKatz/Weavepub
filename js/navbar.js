@@ -22,7 +22,7 @@ Vue.component('NavigationMenu', {
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="#" @click.prevent="$router.push({path: '/search/contents'})">By keywords</a>
-                                <a class="dropdown-item" href="#" @click.prevent="$router.push({path: '/search/author'})">By author</a>
+                                <a class="dropdown-item" href="#" @click.prevent="$router.push({path: '/search/authors'})">By author</a>
                                 <a class="dropdown-item" href="#" @click.prevent="$router.push({path: '/search/subject'})">By subject</a>
                                 <a class="dropdown-item" href="#" @click.prevent="$router.push({path: '/search/publisher'})">By publisher</a>
                                 <div class="dropdown-divider"></div>

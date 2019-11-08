@@ -4,12 +4,12 @@ Vue.component('SingleSearchBar', {
             <select v-model="searchType" class="custom-select searchpage-formitem" style="width: 20%" :disabled="isAdvanced" :style="{backgroundColor: isAdvanced ? 'white' : ''}">
                 <option value="">Search by...</option>
                 <option value="contents" >Contents</option>
-                <option value="author">Author</option>
+                <option value="authors">Author</option>
                 <option value="subject">Subject</option>
-                <option value="publisher">Publisher</option>
+                <option value="owner">Publisher</option>
             </select>
             <input class="form-control border-0 mr-3 mb-2 mr-sm-0 page-search my-3 searchpage-formitem" type="text"
-                    :placeholder="searchType === 'publisher' ? 'Search by publisher address' : (!isAdvanced ? 'Search query' : 'Search query (leave blank for no filter)')" style="width: 79%"
+                    :placeholder="searchType === 'owner' ? 'Search by publisher address' : (!isAdvanced ? 'Search query' : 'Search query (leave blank for no filter)')" style="width: 79%"
                     @input="$emit('input', $event.target.value)" v-model="searchVal">
         </div>
     `,
@@ -44,30 +44,33 @@ Vue.component('searchpage', {
         </div>
         <div>
             <div id="recentPapers" name="recentPapers">
-                <paper-viewer hideTitle :searchQ="searchQ"></paper-viewer>
+                <paper-viewer hideTitle :searchQ="searchFilters" loadPapersFrom="search"></paper-viewer>
             </div>
         </div>
     </div>
     `,
     data: function () {
+        let allSearchTypes = ['contents', 'authors', 'subject', 'owner'];
+        let genObj = () => {
+            let ret = {};
+            for (let searchType of allSearchTypes) ret[searchType] = '';
+            return ret;
+        };
         return {
             loggedIn: true,
-            filters: {
-                contents: '',
-                author: '',
-                subject: '',
-                publisher: ''
-            },
-            allSearchTypes: ['contents', 'author', 'subject', 'publisher'],
-            searchQ: {}
+            filters: genObj(),
+            searchFilters: genObj(),
+            allSearchTypes
         }
     },
     props: ['searchType', 'searchQuery'],
     mounted: function () {
         if (this.searchQuery) {
-            var queries = [this.searchQuery, this.searchQuery];
-            var types = ["abstract", "title"];
-            this.searchQ = { "queries": queries, "types": types };
+            // var queries = [this.searchQuery, this.searchQuery];
+            // var types = ["abstract", "title"];
+            // this.searchQ = { "queries": queries, "types": types };
+            this.filters.contents = this.searchQuery;
+            this.doSearch();
         }
     },
     methods: {
@@ -79,28 +82,30 @@ Vue.component('searchpage', {
                 obj[singleFilter.searchType] = singleFilter.searchVal;
                 this.filters = obj;
             }
-            var queries = [];
-            var types = [];
-            if (this.filters["author"]) {
-                queries.push(this.filters["author"]);
-                types.push("authors");
-            }
-            if (this.filters["contents"]) {
-                queries.push(this.filters["contents"]);
-                types.push("abstract");
-                queries.push(this.filters["contents"]);
-                types.push("title");
-            }
-            if (this.filters["subject"]) {
-                queries.push(this.filters["subject"]);
-                types.push("subject")
-            }
-            if (this.filters["publisher"]) {
-                queries.push(this.filters["publisher"]);
-                types.push("owner")
-            }
-            var sq = { "queries": queries, "types": types };
-            this.searchQ = sq;
+            this.searchFilters = {...this.filters};
+
+            // var queries = [];
+            // var types = [];
+            // if (this.filters["author"]) {
+            //     queries.push(this.filters["author"]);
+            //     types.push("authors");
+            // }
+            // if (this.filters["contents"]) {
+            //     queries.push(this.filters["contents"]);
+            //     types.push("abstract");
+            //     queries.push(this.filters["contents"]);
+            //     types.push("title");
+            // }
+            // if (this.filters["subject"]) {
+            //     queries.push(this.filters["subject"]);
+            //     types.push("subject")
+            // }
+            // if (this.filters["publisher"]) {
+            //     queries.push(this.filters["publisher"]);
+            //     types.push("owner")
+            // }
+            // var sq = { "queries": queries, "types": types };
+            // this.searchQ = sq;
         }
     }
 });

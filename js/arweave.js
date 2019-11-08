@@ -27,20 +27,33 @@ const papersCached = (async function () {
     return out;
 })();
 
-async function searchPapers(types, queries) {
-    var out = [], papers = await papersCached;
-    for (let tags of papers) {
-        for (let j = 0; j < types.length; j++) {
-            console.log(types[j]);
-            console.log(tags);
-            if (tags[types[j]] && tags[types[j]].toLowerCase().indexOf(queries[j].toLowerCase()) !== -1) {
-                out.push(tags);
-                break;
-            }
+function doesPaperMatchSearch(paperTags, filters) {
+    for (let filter in filters) {
+        if (!filters.hasOwnProperty(filter)) continue;
+        let queryWords = filters[filter].toLowerCase().split(/\s+/);
+        let queryOn = filter === 'contents' ? (paperTags.title + '\n' + paperTags.abstract) : (paperTags[filter] || '');
+        for (let word of queryWords) {
+            if (queryOn.toLowerCase().indexOf(word) === -1) return false;
         }
     }
-    console.log(out);
-    return out;
+    return true;
+}
+
+async function searchPapers(filters) {
+    // var out = [], papers = await papersCached;
+    // for (let tags of papers) {
+    //     for (let j = 0; j < types.length; j++) {
+    //         console.log(types[j]);
+    //         console.log(tags);
+    //         if (tags[types[j]] && tags[types[j]].toLowerCase().indexOf(queries[j].toLowerCase()) !== -1) {
+    //             out.push(tags);
+    //             break;
+    //         }
+    //     }
+    // }
+    // console.log(out);
+    let papers = await papersCached;
+    return papers.filter(tags => doesPaperMatchSearch(tags, filters));
 }
 
 async function searchRecent() {
