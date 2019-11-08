@@ -21,7 +21,7 @@ const papersCached = (async function() {
     return out;
 })();
 
-async function searchPapers(types, querys) {
+async function searchPapers(types, queries) {
     const txids = await arweave.arql({
         op: "equals",
         expr1: "Application-ID",
@@ -30,13 +30,18 @@ async function searchPapers(types, querys) {
 
     out = [];
     for (var i = 0; i < txids.length; i++) {
-        var tags = processPaperFromId(txids[0]);
+        var tags = await getTagsFromId(txids[i]);
         for (var j = 0; j < types.length; j++) {
-            if (tags[type].indexOf(query) != -1) {
-                //valid! do something here
+            console.log(types[j]);
+            console.log(tags);
+            if (tags[types[j]] && tags[types[j]].toLowerCase().indexOf(queries[j].toLowerCase()) != -1) {
+                out.push(tags)
+                break;
             }
         }
     }
+    console.log(out);
+    return out;
 }
 
 async function searchRecent() {
@@ -47,8 +52,7 @@ async function searchRecent() {
     });
     out = [];
     for (var i = 0; i < txids.length; i++) {
-        var tags = processPaperFromId(txids[i]);
-        console.log(txids[i]);
+        var tags = await getTagsFromId(txids[i]);
         out.push(tags);
     }
     out.sort(compare);
@@ -58,9 +62,9 @@ async function searchRecent() {
 function compare(o1, o2) {
     if (o1.created && o2.created) {
         if (o1.created > o2.created) {
-            return 1;
+            return -1;
         }
-        return -1;
+        return 1;
     }
     return 0;
 }
@@ -68,9 +72,9 @@ function compare(o1, o2) {
 async function getMyPapers() {
     var wallet = JSON.parse(localStorage.wallet)
     var addr = await arweave.wallets.jwkToAddress(wallet);
-    out = []
+    out = [];
     if (addr) {
-        const txids = await arweave.arql({
+        var txids = await arweave.arql({
             op: "and",
             expr1: {
                 op: "equals",
@@ -83,21 +87,18 @@ async function getMyPapers() {
                 expr2: "WeavePub"
             }
         });
+        console.log(txids);
         for (var i = 0; i < txids.length; i++) {
-            var tags = processPaperFromId(txids[0]);
+            var tags = await getTagsFromId(txids[i]);
             out.push(tags);
         }
+    } else {
+        alert("You're not logged in!");
     }
+    return out
 }
 
 async function processPaperFromId(txid) {
-    const arweave = Arweave.init({
-        host: 'arweave.net',// Hostname or IP address for a Arweave host
-        port: 443,          // Port
-        protocol: 'https',  // Network protocol http or https
-        timeout: 20000,     // Network request timeouts in milliseconds
-        logging: false,     // Enable network request logging
-    });
     var transaction = await arweave.transactions.get(txid);
     var tags = {};
     tags["owner"] = await arweave.wallets.ownerToAddress(transaction.owner);
@@ -108,6 +109,21 @@ async function processPaperFromId(txid) {
         tags[key] = value;
     });
     console.log(tags);
+    return tags;
+}
+
+async function getTagsFromId(txid) {
+    var owner = await fetch(`https://arweave.net/tx/${txid}/owner`);
+    const response = await fetch(`https://arweave.net/tx/${txid}/tags`);
+    var json = await response.json();
+    var tags = {};
+    var owner = await owner.text();
+    tags["txid"] = txid;
+    tags["owner"] = await arweave.wallets.ownerToAddress(owner);
+    for (var i = 0; i < json.length; i++) {
+        obj = json[i];
+        tags[atob(obj.name)] = atob(obj.value);
+    }
     return tags;
 }
 
@@ -150,6 +166,7 @@ async function uploadFile(title, abstract, authors, subject, filedata) {
     }, wallet);
 
     transaction.addTag("Application-ID", "WeavePub");
+    transaction.addTag('Content-Type', 'application/pdf');
     transaction.addTag("created", new Date().getTime());
     transaction.addTag("title", title);
     transaction.addTag("abstract", abstract);

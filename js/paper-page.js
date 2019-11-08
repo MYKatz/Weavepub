@@ -5,7 +5,7 @@ const paperpage = Vue.component('paperpage', {
         <div class="blog section section-invert py-4">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="mx-3">
+                    <div class="mx-5">
                         <h4 class="card-title">{{ title }}</h4>
                         <p class="card-authors">{{ authors }}</p>
                         <p class="card-text">{{ abstract }}</p>
@@ -39,7 +39,7 @@ const paperpage = Vue.component('paperpage', {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">No thanks</button>
-                        <button type="button" class="btn btn-primary" v-on:click=>Send Donation!</button>
+                        <button type="button" class="btn btn-primary" v-on:click="sendDonation">Send Donation!</button>
                     </div>
                 </div>
             </div>
@@ -64,8 +64,10 @@ const paperpage = Vue.component('paperpage', {
         txid: {
             // the callback will be called immediately after the start of the observation
             immediate: true,
-            async handler(val, oldVal) {
-                obj = await processPaperFromId(val);
+            handler: async function (val, oldVal) {
+                console.log(val);
+                obj = await getTagsFromId(val);
+                console.log(obj);
                 this.title = obj["title"];
                 this.authors = obj["authors"];
                 this.abstract = obj["abstract"];
