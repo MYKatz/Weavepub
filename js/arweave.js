@@ -8,6 +8,19 @@ const arweave = Arweave.init({
     logging: false,     // Enable network request logging
 });
 
+const papersCached = (async function() {
+    const txids = await arweave.arql({
+        op: "equals",
+        expr1: "Application-ID",
+        expr2: "WeavePub"
+    });
+    let out = [];
+    for (let txid of txids) {
+        out.push(await processPaperFromId(txid));
+    }
+    return out;
+})();
+
 async function searchPapers(types, queries) {
     const txids = await arweave.arql({
         op: "equals",
