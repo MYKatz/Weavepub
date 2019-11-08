@@ -9,6 +9,7 @@ const paperpage = Vue.component('paperpage', {
                         <h4 class="card-title">{{ title }}</h4>
                         <p class="card-authors">{{ authors }}</p>
                         <p class="card-text">{{ abstract }}</p>
+                        <a class="btn btn-primary btn-block" style="color:white;">Donate</a>
                     </div>
                 </div>
                 <div class="col-md-8">
@@ -19,6 +20,34 @@ const paperpage = Vue.component('paperpage', {
             </div>
         </div>
         <footer-bar></footer-bar>
+        
+        <div class="modal fade" id="donateModal" tabindex="-1" role="dialog" aria-labelledby="donateModalLabel"
+        aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="donateModalLabel">Log in</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">Please upload your Arweave keyfile to sign in.</div>
+                        <div class="custom-file mb-3">
+                            <input type="file" class="custom-file-input" id="keychoose">
+                            <label class="custom-file-label" for="keychoose">Upload keyfile</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No thanks</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
     </div>
     `,
     data: function () {
@@ -40,6 +69,11 @@ const paperpage = Vue.component('paperpage', {
                 this.authors = obj["authors"];
                 this.abstract = obj["abstract"];
             }
+        }
+    },
+    methods: {
+        toggleModal: function() {
+            $("#donateModal").modal("toggle");
         }
     }
 });

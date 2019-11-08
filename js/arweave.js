@@ -128,7 +128,7 @@ function login(files, fileLoadCallback) {
     reader.readAsText(files[0]);
 }
 
-async function uploadFile(title, abstract, subject, filedata) {
+async function uploadFile(title, abstract, authors, subject, filedata) {
     var wallet = JSON.parse(localStorage.wallet);
     let transaction = await arweave.createTransaction({
         data: filedata
@@ -138,6 +138,7 @@ async function uploadFile(title, abstract, subject, filedata) {
     transaction.addTag("created", new Date().getTime());
     transaction.addTag("title", title);
     transaction.addTag("abstract", abstract);
+    transaction.addTag("authors", authors);
     transaction.addTag("subject", subject);
 
     await arweave.transactions.sign(transaction, wallet);
