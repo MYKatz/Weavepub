@@ -39,10 +39,14 @@ Vue.component('PaperViewer', {
         </div>
     </div>
     `,
-    data: function () {
+    data: async function () {
         var obj = {};
         obj.papers = [];
-        for (let i = 0; i < 6; ++i) {
+        var recent = await searchRecent;
+        for (let i = 0; i < Math.min(9, recent.length); ++i) {
+            obj.papers.push({
+                title: recent[i].title,
+            })
             obj.papers.push({
                 title: "Improved Learning in a Large-Enrollment Physics Class",
                 authors: ["Louis Deslauriers", "Carl Wieman"],
