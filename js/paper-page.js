@@ -1,7 +1,7 @@
 const paperpage = Vue.component('paperpage', {
     template: `
     <div>
-        <navigation-menu activePage="recent"></navigation-menu>
+        <navigation-menu activePage="none"></navigation-menu>
         <div class="blog section section-invert py-4">
             <div class="row">
                 <div class="col-md-3">
