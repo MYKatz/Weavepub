@@ -84,7 +84,7 @@ Vue.component('UploadForm', {
 
             const reader = new FileReader();
             reader.onload = async function () {
-                const file_data = reader.result;
+                const file_data = new Uint8Array(reader.result);
                 //send arweave transaction
                 var resp = await uploadFile(title, abstract, authors, subject, file_data);
                 if (resp.status == 200) {
@@ -110,7 +110,7 @@ Vue.component('UploadForm', {
                     this.uploadProgress = 100;
                 }); */
             }
-            reader.readAsDataURL(this.$refs.pdfUpload.files[0]);
+            reader.readAsArrayBuffer(this.$refs.pdfUpload.files[0]);
 
         }
     },

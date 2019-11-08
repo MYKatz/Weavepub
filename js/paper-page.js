@@ -39,7 +39,7 @@ const paperpage = Vue.component('paperpage', {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">No thanks</button>
-                        <button type="button" class="btn btn-primary" v-on:click=>Send Donation!</button>
+                        <button type="button" class="btn btn-primary" v-on:click="sendDonation">Send Donation!</button>
                     </div>
                 </div>
             </div>
