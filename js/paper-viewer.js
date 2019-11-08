@@ -3,7 +3,7 @@ Vue.component('Paper', {
     <div class="col-md-12 col-lg-4">
         <div class="card mb-4">
             <div class="card-body">
-                <h4 class="card-title">Improved Learning in a Large-Enrollment Physics Class</h4>
+                <h4 class="card-title">{{paperTitle}}</h4>
                 <p class="card-authors">{{authorsAsString}}</p>
                 <p class="card-text">{{shortAbstract}}</p>
                  <router-link class="btn btn-outline-success btn-pill" :to="paperLink">Read More &rarr;</router-link>
@@ -19,7 +19,10 @@ Vue.component('Paper', {
         shortAbstract: function () {
             return this.abstract.length >= 200 ? this.abstract.slice(0, 200) + "..." : this.abstract;
         },
-        paperLink: function() {
+        paperTitle: function () {
+            return this.title;
+        },
+        paperLink: function () {
             return "/paper/" + this.txid;
         }
     }
@@ -33,23 +36,22 @@ Vue.component('PaperViewer', {
         <div class="container">
             <div class="py-4">
                 <div class="row">
-                    <div class="card-deck">
+                        <div v-if="papers.length == 0">Loading...</div>
                         <Paper v-for="paper in papers" :title="paper.title" :authors="paper.authors" :abstract="paper.abstract" :key="paper.txid" :txid="paper.txid"></Paper>
-                    </div>
                 </div>
             </div>
         </div>
         </div>
     </div>
     `,
-    data: function() {
-        return {papers: []}
+    data: function () {
+        return { papers: [] }
     },
     props: {
         hideTitle: Boolean,
         title: {
             type: String,
-            default: "Latest Paperes"
+            default: "Latest Papers"
         },
         /*papers: {
             type: Array,
@@ -75,7 +77,7 @@ Vue.component('PaperViewer', {
     watch: {
         loadPapersFrom: {
             immediate: true,
-            handler: async function(newValue) {
+            handler: async function (newValue) {
                 if (newValue === 'recent') {
                     let recent = await searchRecent();
                     this.papers = recent;
