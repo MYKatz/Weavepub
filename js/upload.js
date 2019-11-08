@@ -27,7 +27,7 @@ Vue.component('UploadForm', {
             <input type="file" required ref="pdfUpload" class="btn btn-primary" accept="application/pdf"/><br />
             <div class="submit">
             <template v-if="0 <= uploadProgress && uploadProgress < 100">
-            <button class="btn btn-secondary submit">Submit</button>
+            <button class="btn btn-secondary submit my-2">Submit</button>
             <span v-if="0 !== uploadProgress">
                 Progress: <progress :value="uploadProgress" max="100"></progress>
             </span>
