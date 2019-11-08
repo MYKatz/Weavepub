@@ -13,12 +13,17 @@ Vue.component('SingleSearchBar', {
                     @input="$emit('input', $event.target.value)" v-model="searchVal">
         </div>
     `,
-    data: function () { return { value: '', chosenSearchType: '', searchVal: this.initValue } },
+    data: function () { return { chosenSearchType: '', searchVal: this.initValue } },
     props: ['initSearchType', 'isAdvanced', 'initValue'],
     computed: {
         searchType: {
             get: function () { return this.chosenSearchType || this.initSearchType; },
             set: function (v) { this.chosenSearchType = v; }
+        }
+    },
+    watch: {
+        initValue: function(newValue) {
+            this.searchVal = newValue;
         }
     }
 });
@@ -39,7 +44,7 @@ Vue.component('searchpage', {
         </div>
         <div>
             <div id="recentPapers" name="recentPapers">
-                <paper-viewer :hideTitle="true"></paper-viewer>
+                <paper-viewer hideTitle></paper-viewer>
             </div>
         </div>
     </div>
@@ -68,7 +73,7 @@ Vue.component('searchpage', {
                 let singleFilter = this.$refs.singleFilter;
                 let obj = {};
                 for (let searchType of this.allSearchTypes) obj[searchType] = '';
-                obj[singleFilter.searchType] = singleFilter.value;
+                obj[singleFilter.searchType] = singleFilter.searchVal;
                 this.filters = obj;
             }
             console.log("Searching with", this.filters);
