@@ -9,8 +9,8 @@ const paperpage = Vue.component('paperpage', {
                         <h4 class="card-title">{{ title }}</h4>
                         <p class="card-authors">{{ authors }}</p>
                         <p class="card-text">{{ abstract }}</p>
-                        <a class="btn btn-primary btn-block" style="color:white;">Donate</a>
-                    </div>
+                        <button class="btn btn-primary btn-block" style="color:white;" v-on:click="toggleModal">Donate</button>
+                    </div> 
                 </div>
                 <div class="col-md-8">
                     <object class="paper-pdf" v-bind:data="'http://arweave.net/' + txid" type="application/pdf">
@@ -26,20 +26,20 @@ const paperpage = Vue.component('paperpage', {
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="donateModalLabel">Log in</h5>
+                        <h5 class="modal-title" id="donateModalLabel">Donate to author</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="mb-3">Please upload your Arweave keyfile to sign in.</div>
+                        <div class="mb-3">How much AR would you like to donate?</div>
                         <div class="custom-file mb-3">
-                            <input type="file" class="custom-file-input" id="keychoose">
-                            <label class="custom-file-label" for="keychoose">Upload keyfile</label>
+                            <input type="number" v-model="donateAmount">
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">No thanks</button>
+                        <button type="button" class="btn btn-primary" v-on:click=>Send Donation!</button>
                     </div>
                 </div>
             </div>
@@ -56,6 +56,7 @@ const paperpage = Vue.component('paperpage', {
             title: null,
             authors: null,
             abstract: null,
+            donateAmount: 0
         }
     },
     props: ["txid"],
@@ -72,8 +73,17 @@ const paperpage = Vue.component('paperpage', {
         }
     },
     methods: {
-        toggleModal: function() {
+        toggleModal: function (event) {
             $("#donateModal").modal("toggle");
+        },
+        sendDonation: function (event) {
+            console.log(this.donateAmount);
+            if (localStorage.wallet) {
+                console.log("donating...");
+            } else {
+                alert("Please log in first")
+                location.reload();
+            }
         }
     }
 });
