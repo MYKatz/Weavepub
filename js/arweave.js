@@ -8,17 +8,60 @@ const arweave = Arweave.init({
     logging: false,     // Enable network request logging
 });
 
-async function searchPapers(type, query) {
+async function searchPapers(types, querys) {
     const txids = await arweave.arql({
         op: "equals",
         expr1: "Application-ID",
         expr2: "WeavePub"
     });
 
+    out = [];
     for (var i = 0; i < txids.length; i++) {
         var tags = processPasteFromId(txids[0]);
-        if (tags[type].indexOf(query) != -1) {
-            //valid! do something here
+        for (var j = 0; j < types.length; j++) {
+            if (tags[type].indexOf(query) != -1) {
+                //valid! do something here
+            }
+        }
+    }
+}
+
+async function searchRecent() {
+    const txids = await arweave.arql({
+        op: "equals",
+        expr1: "Application-ID",
+        expr2: "WeavePub"
+    });
+    return txids;
+    out = [];
+    for (var i = 0; i < txids.length; i++) {
+        var tags = processPasteFromId(txids[0]);
+        out.push(tags);
+    }
+    return tags;
+}
+
+async function getMyPapers() {
+    var wallet = JSON.parse(localStorage.wallet)
+    var addr = await arweave.wallets.jwkToAddress(wallet);
+    out = []
+    if (addr) {
+        const txids = await arweave.arql({
+            op: "and",
+            expr1: {
+                op: "equals",
+                expr1: "from",
+                expr2: addr
+            },
+            expr2: {
+                op: "equals",
+                expr1: "Application-ID",
+                expr2: "WeavePub"
+            }
+        });
+        for (var i = 0; i < txids.length; i++) {
+            var tags = processPasteFromId(txids[0]);
+            out.push(tags);
         }
     }
 }
@@ -76,20 +119,21 @@ function login(files, fileLoadCallback) {
 }
 
 async function uploadFile(title, abstract, subject, filedata) {
+    var wallet = JSON.parse(localStorage.wallet);
     let transaction = await arweave.createTransaction({
         data: filedata
-    }, localStorage.wallet);
+    }, wallet);
 
-    transaction.addTag("app", "Weavepub");
+    transaction.addTag("Application-ID", "WeavePub");
     transaction.addTag("created", new Date().getTime());
     transaction.addTag("title", title);
     transaction.addTag("abstract", abstract);
     transaction.addTag("subject", subject);
 
-    await arweave.transactions.sign(transaction, localStorage.wallet);
+    await arweave.transactions.sign(transaction, wallet);
     const response = await arweave.transactions.post(transaction);
 
-    console("resp: ", response);
+    console.log("resp: ", response);
     return response;
 }
 

@@ -49,7 +49,14 @@ Vue.component('UploadForm', {
             allSubjects: [
                 { id: 1, name: 'Mathematics' },
                 { id: 2, name: 'Physics' },
-                { id: 3, name: 'Astrobiology' }
+                { id: 3, name: 'Biology' },
+                { id: 4, name: 'Anthropology' },
+                { id: 5, name: 'Art History' },
+                { id: 6, name: 'Computer Science' },
+                { id: 7, name: 'Economics' },
+                { id: 8, name: 'Chemistry' },
+                { id: 9, name: 'Psychology' },
+                { id: 10, name: 'Other' },
             ],
             uploadProgress: 0
         };
@@ -65,12 +72,12 @@ Vue.component('UploadForm', {
                 alert("You're not logged in! Please return home and try again.");
             }
             console.log("Uploading stuff with title", this.title, "abstract", this.abstract, "subject", this.subject.selectedObject.name, "and file", this.$refs.pdfUpload.files[0]);
+            var subject = this.subject.selectedObject.name;
             const reader = new FileReader();
             reader.onload = async function () {
-                const file_data = new Uint8Array(reader.result)
-                console.log(file_data);
+                const file_data = reader.result;
                 //send arweave transaction
-                await uploadFile(this.title, this.abstract, this.subject.selectedObject.name, file_data);
+                await uploadFile(this.title, this.abstract, subject, file_data);
 
                 var seconds = 0, dt = 1, totalUploadTime = 15 * 60, padding = 1000;
                 var interval = setInterval(() => {
@@ -88,7 +95,7 @@ Vue.component('UploadForm', {
                     this.uploadProgress = 100;
                 });
             }
-            reader.readAsArrayBuffer(this.$refs.pdfUpload.files[0]);
+            reader.readAsDataURL(this.$refs.pdfUpload.files[0]);
         }
     },
     components: {
