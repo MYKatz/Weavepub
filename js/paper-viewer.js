@@ -37,8 +37,8 @@ Vue.component('PaperViewer', {
         <div class="container">
             <div class="py-4">
                 <div class="row">
-                        <div v-if="papers.length == 0">Loading...</div>
-                        <div v-if="papers[0] == 'bad'">No results found</div>
+                        <div v-if="papers.length == 0 && !noResultsFound">Loading...</div>
+                        <div v-if="noResultsFound">No results found</div>
                         <Paper v-for="paper in papers" :title="paper.title" :authors="paper.authors" :abstract="paper.abstract" :key="paper.txid" :txid="paper.txid"></Paper>
                 </div>
             </div>
@@ -47,7 +47,7 @@ Vue.component('PaperViewer', {
     </div>
     `,
     data: function () {
-        return { papers: [] }
+        return { papers: [], noResultsFound: false }
     },
     props: {
         hideTitle: Boolean,
@@ -88,7 +88,6 @@ Vue.component('PaperViewer', {
                     let recent = await searchRecent();
                     this.papers = recent;
                 } else if (newValue === 'default') {
-                    let ret = [];
                     /*                     for (let i = 0; i < 6; ++i) {
                                             ret.push({
                                                 title: "Improved Learning in a Large-Enrollment Physics Class",
@@ -99,14 +98,12 @@ Vue.component('PaperViewer', {
                                                 txid: i
                                             });
                                         } */
-                    this.papers = ret;
+                    this.papers = [];
                 } else if (newValue === 'mypapers') {
                     let mine = await getMyPapers();
                     this.papers = mine;
                 }
-                if (this.papers.length == 0) {
-                    this.papers = ["bad"];
-                }
+                this.noResultsFound = this.papers.length === 0;
             }
         },
         searchQ: {
@@ -114,9 +111,7 @@ Vue.component('PaperViewer', {
                 this.papers = [];
                 console.log(newValue["queries"], newValue["types"]);
                 this.papers = await searchPapers(newValue["types"], newValue["queries"]);
-                if (this.papers.length == 0) {
-                    this.papers = ["bad"];
-                }
+                this.noResultsFound = this.papers.length === 0;
             }
         }
     }

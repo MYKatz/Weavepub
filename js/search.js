@@ -9,7 +9,7 @@ Vue.component('SingleSearchBar', {
                 <option value="publisher">Publisher</option>
             </select>
             <input class="form-control border-0 mr-3 mb-2 mr-sm-0 page-search my-3 searchpage-formitem" type="text"
-                    :placeholder="!isAdvanced ? 'Search query' : 'Search query (leave blank for no filter)'" style="width: 79%"
+                    :placeholder="searchType === 'publisher' ? 'Search by publisher address' : (!isAdvanced ? 'Search query' : 'Search query (leave blank for no filter)')" style="width: 79%"
                     @input="$emit('input', $event.target.value)" v-model="searchVal">
         </div>
     `,
