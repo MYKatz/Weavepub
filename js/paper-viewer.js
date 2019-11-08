@@ -49,7 +49,7 @@ Vue.component('PaperViewer', {
         hideTitle: Boolean,
         title: {
             type: String,
-            default: "Latest Paperes"
+            default: "Latest Papers"
         },
         /*papers: {
             type: Array,
