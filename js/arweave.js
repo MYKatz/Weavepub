@@ -34,7 +34,7 @@ async function searchRecent() {
     });
     out = [];
     for (var i = 0; i < txids.length; i++) {
-        var tags = processPaperFromId(txids[i]);
+        var tags = await getTagsFromId(txids[i]);
         out.push(tags);
     }
     out.sort(compare);
@@ -77,13 +77,6 @@ async function getMyPapers() {
 }
 
 async function processPaperFromId(txid) {
-    const arweave = Arweave.init({
-        host: 'arweave.net',// Hostname or IP address for a Arweave host
-        port: 443,          // Port
-        protocol: 'https',  // Network protocol http or https
-        timeout: 20000,     // Network request timeouts in milliseconds
-        logging: false,     // Enable network request logging
-    });
     var transaction = await arweave.transactions.get(txid);
     var tags = {};
     tags["owner"] = await arweave.wallets.ownerToAddress(transaction.owner);
@@ -94,6 +87,20 @@ async function processPaperFromId(txid) {
         tags[key] = value;
     });
     console.log(tags);
+    return tags;
+}
+
+async function getTagsFromId(txid) {
+    /* const owner = await fetch(`https://arweave.net/tx/${txid}/owner`);
+    console.log(owner); */
+    const response = await fetch(`https://arweave.net/tx/${txid}/tags`);
+    var json = await response.json();
+    var tags = {};
+    tags["txid"] = txid;
+    for (var i = 0; i < json.length; i++) {
+        obj = json[i];
+        tags[atob(obj.name)] = atob(obj.value);
+    }
     return tags;
 }
 
