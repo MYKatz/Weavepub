@@ -21,9 +21,8 @@ Vue.component('UploadForm', {
             <p>You selected {{subject.display}}</p>
             <hr />
             <h3>Terms</h3>
-            <p>Yeah so you probs wanna upload your own work
-            OR something under a creative commons license idk which version</p>
-            <input type="checkbox" name="terms" id="terms" required/> <label for="terms">I have read and agreed to the terms and conditions (lol no I haven't but I'll check it anyway)</label>
+            <p>I certify that the materials I am submitting are licensed under a Creative Commons license or under Open Access. If the materials I am submitting are original work, I agree to submit them under a CC BY- NC 4.0 license.</p>
+            <input type="checkbox" name="terms" id="terms" required/> <label for="terms">I agree</label>
             <hr />
             <input type="file" required ref="pdfUpload" class="btn btn-primary" accept="application/pdf"/><br />
             <div class="submit">

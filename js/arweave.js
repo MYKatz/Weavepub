@@ -8,7 +8,7 @@ const arweave = Arweave.init({
     logging: false,     // Enable network request logging
 });
 
-const papersCached = (async function() {
+const papersCached = (async function () {
     const txids = await arweave.arql({
         op: "equals",
         expr1: "Application-ID",
