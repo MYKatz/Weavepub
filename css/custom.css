@@ -47,3 +47,12 @@
     width: 100%;
     min-height: 80vh;
 }
+
+.paper-viewer .progress {
+    width: 100%;
+    text-align: center;
+}
+
+.paper-viewer .progress-bar {
+    width: 1%;
+}

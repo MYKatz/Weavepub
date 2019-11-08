@@ -8,15 +8,21 @@ const arweave = Arweave.init({
     logging: false,     // Enable network request logging
 });
 
+var papersCachedLoaded = 0, papersCachedTotal = 0;
+var myPapersLoaded = 0, myPapersTotal = 0;
+
 const papersCached = (async function () {
     const txids = await arweave.arql({
         op: "equals",
         expr1: "Application-ID",
         expr2: "WeavePub"
     });
+    papersCachedTotal = txids.length + 1;
+    papersCachedLoaded = 1;
     let out = [];
     for (let txid of txids) {
         out.push(await getTagsFromId(txid));
+        papersCachedLoaded++;
     }
     return out;
 })();
@@ -55,9 +61,10 @@ function compare(o1, o2) {
 }
 
 async function getMyPapers() {
-    var wallet = JSON.parse(localStorage.wallet)
+    var wallet = JSON.parse(localStorage.wallet);
     var addr = await arweave.wallets.jwkToAddress(wallet);
     out = [];
+    myPapersLoaded = myPapersTotal = 0;
     if (addr) {
         var txids = await arweave.arql({
             op: "and",
@@ -73,9 +80,12 @@ async function getMyPapers() {
             }
         });
         console.log(txids);
+        myPapersTotal = txids.length + 1;
+        myPapersLoaded = 1;
         for (var i = 0; i < txids.length; i++) {
             var tags = await getTagsFromId(txids[i]);
             out.push(tags);
+            myPapersLoaded++;
         }
     } else {
         alert("You're not logged in!");

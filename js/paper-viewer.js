@@ -37,7 +37,9 @@ Vue.component('PaperViewer', {
         <div class="container">
             <div class="py-4">
                 <div class="row">
-                        <div v-if="papers.length == 0 && !noResultsFound">Loading...</div>
+                        <div v-if="papers.length == 0 && !noResultsFound" class="align-content-center progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :aria-valuenow="loadProgress" aria-valuemax="1" aria-valuemin="0" :style="{width: Math.round(loadProgress*100) + '%'}"></div>
+                        </div>
                         <div v-if="noResultsFound">No results found</div>
                         <Paper v-for="paper in papers" :title="paper.title" :authors="paper.authors" :abstract="paper.abstract" :key="paper.txid" :txid="paper.txid"></Paper>
                 </div>
@@ -47,7 +49,18 @@ Vue.component('PaperViewer', {
     </div>
     `,
     data: function () {
-        return { papers: [], noResultsFound: false }
+        return { papers: [], noResultsFound: false, loadProgress: 0 }
+    },
+    created: function() {
+        let interval = setInterval(() => {
+            var loaded = this.loadPapersFrom === 'mypapers' ? myPapersLoaded : papersCachedLoaded;
+            var total = this.loadProgress === 'mypapers' ? myPapersTotal : papersCachedTotal;
+            this.loadProgress = total === 0 ? 0 : loaded / total;
+            if (loaded === total && total !== 0) {
+                clearInterval(interval);
+            }
+            console.log("Load progress", this.loadProgress);
+        }, 50);
     },
     props: {
         hideTitle: Boolean,
