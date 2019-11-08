@@ -90,7 +90,6 @@ Vue.component('UploadForm', {
             reader.onload = async function () {
                 const file_data = reader.result;
                 //send arweave transaction
-<<<<<<< HEAD
                 await uploadFile(this.title, this.abstract, subject, file_data);
 
                 this.uploadProgress = 101;/*  */
@@ -110,12 +109,6 @@ Vue.component('UploadForm', {
                     this.uploadProgress = 100;
                 }); */
             }
-=======
-                await uploadFile(_this.title, _this.abstract, subject, file_data);
-                clearInterval(interval);
-                _this.uploadProgress = 100;
-            };
->>>>>>> 9f69502afd1ca051f69fc98be146212786e61fcc
             reader.readAsDataURL(this.$refs.pdfUpload.files[0]);
 
         }
