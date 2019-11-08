@@ -34,10 +34,11 @@ async function searchRecent() {
     });
     out = [];
     for (var i = 0; i < txids.length; i++) {
-        var tags = processPaperFromId(txids[0]);
+        var tags = processPaperFromId(txids[i]);
+        console.log(txids[i]);
         out.push(tags);
     }
-    //out.sort(compare);
+    out.sort(compare);
     return out;
 }
 
@@ -87,6 +88,7 @@ async function processPaperFromId(txid) {
     var transaction = await arweave.transactions.get(txid);
     var tags = {};
     tags["owner"] = await arweave.wallets.ownerToAddress(transaction.owner);
+    tags["txid"] = txid;
     transaction.get("tags").forEach((tag) => {
         let key = tag.get("name", { decode: true, string: true });
         let value = tag.get("value", { decode: true, string: true });
@@ -128,7 +130,7 @@ function login(files, fileLoadCallback) {
     reader.readAsText(files[0]);
 }
 
-async function uploadFile(title, abstract, subject, filedata) {
+async function uploadFile(title, abstract, authors, subject, filedata) {
     var wallet = JSON.parse(localStorage.wallet);
     let transaction = await arweave.createTransaction({
         data: filedata
@@ -138,8 +140,10 @@ async function uploadFile(title, abstract, subject, filedata) {
     transaction.addTag("created", new Date().getTime());
     transaction.addTag("title", title);
     transaction.addTag("abstract", abstract);
+    transaction.addTag("authors", authors);
     transaction.addTag("subject", subject);
 
+    console.log(transaction);
     await arweave.transactions.sign(transaction, wallet);
     const response = await arweave.transactions.post(transaction);
 

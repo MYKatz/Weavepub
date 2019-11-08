@@ -9,6 +9,9 @@ Vue.component('UploadForm', {
             <h3>Abstract</h3>
             <textarea v-model="abstract" required/><br/>
             <hr />
+            <h3>Authors</h3>
+            <textarea v-model="authors" required/><br/>
+            <hr />
             <h3>Subject</h3>
             <autocomplete
               placeholder="Enter the subject (e.g. Mathematics, Physics etc.)"
@@ -45,6 +48,7 @@ Vue.component('UploadForm', {
         return {
             title: '',
             abstract: '',
+            authors: '',
             subject: { display: '' },
             allSubjects: [
                 { id: 1, name: 'Mathematics' },
@@ -73,24 +77,16 @@ Vue.component('UploadForm', {
             }
             console.log("Uploading stuff with title", this.title, "abstract", this.abstract, "subject", this.subject.selectedObject.name, "and file", this.$refs.pdfUpload.files[0]);
             var subject = this.subject.selectedObject.name;
+            var title = this.title;
+            var abstract = this.abstract;
+            var authors = this.authors;
             var _this = this;
-            var seconds = 0, dt = 1, totalUploadTime = 15 * 60, padding = 1000;
-            var interval = setInterval(() => {
-                seconds += dt;
-                if (seconds <= totalUploadTime) {
-                    this.uploadProgress = seconds / (totalUploadTime + padding) * 100;
-                } else {
-                    let decay = 1 / padding;
-                    let totalDecay = 1 - Math.exp(-decay * (seconds - totalUploadTime));
-                    this.uploadProgress = (totalUploadTime + padding * totalDecay) / (totalUploadTime + padding) * 100;
-                }
-            }, dt * 1000);
 
             const reader = new FileReader();
             reader.onload = async function () {
                 const file_data = reader.result;
                 //send arweave transaction
-                await uploadFile(this.title, this.abstract, subject, file_data);
+                await uploadFile(title, abstract, authors, subject, file_data);
 
                 this.uploadProgress = 101;/*  */
                 /* var seconds = 0, dt = 1, totalUploadTime = 15 * 60, padding = 1000;
