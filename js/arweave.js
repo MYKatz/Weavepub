@@ -12,7 +12,7 @@ const papersCached = (async function () {
     const txids = await arweave.arql({
         op: "equals",
         expr1: "Application-ID",
-        expr2: "WeavePub"
+        expr2: "WeavePub-prod"
     });
     let out = [];
     for (let txid of txids) {
@@ -69,7 +69,7 @@ async function getMyPapers() {
             expr2: {
                 op: "equals",
                 expr1: "Application-ID",
-                expr2: "WeavePub"
+                expr2: "WeavePub-prod"
             }
         });
         console.log(txids);
@@ -150,7 +150,7 @@ async function uploadFile(title, abstract, authors, subject, filedata) {
         data: filedata
     }, wallet);
 
-    transaction.addTag("Application-ID", "WeavePub");
+    transaction.addTag("Application-ID", "WeavePub-prod");
     transaction.addTag('Content-Type', 'application/pdf');
     transaction.addTag("created", new Date().getTime());
     transaction.addTag("title", title);
