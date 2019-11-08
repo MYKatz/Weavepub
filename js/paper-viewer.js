@@ -26,7 +26,7 @@ Vue.component('PaperViewer', {
     template: `
     <div class="paper-viewer">
         <div class="blog section section-invert py-4">
-        <h3 class="section-title text-center m-5" v-if="!hideTitle">Latest Papers</h3>
+        <h3 class="section-title text-center m-5" v-if="!hideTitle">{{title}}</h3>
         <div class="container">
             <div class="py-4">
                 <div class="row">
@@ -39,19 +39,27 @@ Vue.component('PaperViewer', {
         </div>
     </div>
     `,
-    data: function () {
-        var obj = {};
-        obj.papers = [];
-        for (let i = 0; i < 6; ++i) {
-            obj.papers.push({
-                title: "Improved Learning in a Large-Enrollment Physics Class",
-                authors: ["Louis Deslauriers", "Carl Wieman"],
-                abstract: `We compared the amounts of learning achieved using two different instructional approaches
+    props: {
+        hideTitle: Boolean,
+        title: {
+            type: String,
+            default: "Latest Paperes"
+        },
+        papers: {
+            type: Array,
+            default: function() {
+                var ret = [];
+                for (let i = 0; i < 6; ++i) {
+                    ret.push({
+                        title: "Improved Learning in a Large-Enrollment Physics Class",
+                        authors: ["Louis Deslauriers", "Carl Wieman"],
+                        abstract: `We compared the amounts of learning achieved using two different instructional approaches
                 under controlled conditions. We measured the learning of a specific set of topics and objectives when...`,
-                id: i
-            });
+                        id: i
+                    });
+                }
+                return ret;
+            }
         }
-        return obj;
-    },
-    props: ["hideTitle"]
+    }
 });

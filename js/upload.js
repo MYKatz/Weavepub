@@ -73,29 +73,29 @@ Vue.component('UploadForm', {
             }
             console.log("Uploading stuff with title", this.title, "abstract", this.abstract, "subject", this.subject.selectedObject.name, "and file", this.$refs.pdfUpload.files[0]);
             var subject = this.subject.selectedObject.name;
+            var _this = this;
+            var seconds = 0, dt = 1, totalUploadTime = 15 * 60, padding = 1000;
+            var interval = setInterval(() => {
+                seconds += dt;
+                if (seconds <= totalUploadTime) {
+                    this.uploadProgress = seconds / (totalUploadTime + padding) * 100;
+                } else {
+                    let decay = 1 / padding;
+                    let totalDecay = 1 - Math.exp(-decay * (seconds - totalUploadTime));
+                    this.uploadProgress = (totalUploadTime + padding * totalDecay) / (totalUploadTime + padding) * 100;
+                }
+            }, dt * 1000);
+
             const reader = new FileReader();
             reader.onload = async function () {
                 const file_data = reader.result;
                 //send arweave transaction
-                await uploadFile(this.title, this.abstract, subject, file_data);
-
-                var seconds = 0, dt = 1, totalUploadTime = 15 * 60, padding = 1000;
-                var interval = setInterval(() => {
-                    seconds += dt;
-                    if (seconds <= totalUploadTime) {
-                        this.uploadProgress = seconds / (totalUploadTime + padding) * 100;
-                    } else {
-                        let decay = 1 / padding;
-                        let totalDecay = 1 - Math.exp(-decay * (seconds - totalUploadTime));
-                        this.uploadProgress = (totalUploadTime + padding * totalDecay) / (totalUploadTime + padding) * 100;
-                    }
-                }, dt * 1000);
-                new Promise((resolve) => setTimeout(resolve, 1000, "Done!")).then(() => {
-                    clearInterval(interval);
-                    this.uploadProgress = 100;
-                });
-            }
+                await uploadFile(_this.title, _this.abstract, subject, file_data);
+                clearInterval(interval);
+                _this.uploadProgress = 100;
+            };
             reader.readAsDataURL(this.$refs.pdfUpload.files[0]);
+
         }
     },
     components: {
