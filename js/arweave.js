@@ -21,7 +21,7 @@ async function searchPapers(types, queries) {
         for (var j = 0; j < types.length; j++) {
             console.log(types[j]);
             console.log(tags);
-            if (tags[types[j]] && tags[types[j]].indexOf(queries[j]) != -1) {
+            if (tags[types[j]] && tags[types[j]].toLowerCase().indexOf(queries[j].toLowerCase()) != -1) {
                 out.push(tags)
                 break;
             }

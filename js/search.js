@@ -65,8 +65,9 @@ Vue.component('searchpage', {
     props: ['searchType', 'searchQuery'],
     mounted: function () {
         if (this.searchQuery) {
-            var queries = [this.searchQuery];
-            var types = ["contents"];
+            var queries = [this.searchQuery, this.searchQuery];
+            var types = ["abstract", "title"];
+            this.searchQ = { "queries": queries, "types": types };
         }
     },
     methods: {
@@ -86,7 +87,9 @@ Vue.component('searchpage', {
             }
             if (this.filters["contents"]) {
                 queries.push(this.filters["contents"]);
-                types.push("abstract")
+                types.push("abstract");
+                queries.push(this.filters["contents"]);
+                types.push("title");
             }
             if (this.filters["subject"]) {
                 queries.push(this.filters["subject"]);

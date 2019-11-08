@@ -37,6 +37,7 @@ Vue.component('PaperViewer', {
             <div class="py-4">
                 <div class="row">
                         <div v-if="papers.length == 0">Loading...</div>
+                        <div v-if="papers[0] == 'bad'">No results found</div>
                         <Paper v-for="paper in papers" :title="paper.title" :authors="paper.authors" :abstract="paper.abstract" :key="paper.txid" :txid="paper.txid"></Paper>
                 </div>
             </div>
@@ -87,27 +88,34 @@ Vue.component('PaperViewer', {
                     this.papers = recent;
                 } else if (newValue === 'default') {
                     let ret = [];
-                    for (let i = 0; i < 6; ++i) {
-                        ret.push({
-                            title: "Improved Learning in a Large-Enrollment Physics Class",
-                            authors: ["Louis Deslauriers", "Carl Wieman"].join(", "),
-                            abstract: `We compared the amounts of learning achieved using two different instructional approaches
-                under controlled conditions. We measured the learning of a specific set of topics and objectives when...`,
-                            created: 0,
-                            txid: i
-                        });
-                    }
+                    /*                     for (let i = 0; i < 6; ++i) {
+                                            ret.push({
+                                                title: "Improved Learning in a Large-Enrollment Physics Class",
+                                                authors: ["Louis Deslauriers", "Carl Wieman"].join(", "),
+                                                abstract: `We compared the amounts of learning achieved using two different instructional approaches
+                                    under controlled conditions. We measured the learning of a specific set of topics and objectives when...`,
+                                                created: 0,
+                                                txid: i
+                                            });
+                                        } */
                     this.papers = ret;
                 } else if (newValue === 'mypapers') {
                     let mine = await getMyPapers();
                     this.papers = mine;
                 }
+                if (this.papers.length == 0) {
+                    this.papers = ["bad"];
+                }
             }
         },
         searchQ: {
             handler: async function (newValue) {
+                this.papers = [];
                 console.log(newValue["queries"], newValue["types"]);
                 this.papers = await searchPapers(newValue["types"], newValue["queries"]);
+                if (this.papers.length == 0) {
+                    this.papers = ["bad"];
+                }
             }
         }
     }

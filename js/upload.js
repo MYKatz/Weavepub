@@ -86,8 +86,12 @@ Vue.component('UploadForm', {
             reader.onload = async function () {
                 const file_data = reader.result;
                 //send arweave transaction
-                await uploadFile(title, abstract, authors, subject, file_data);
-                alert("successfully uploaded - it may take a few minutes for your paper to be accepted into the blockchain.")
+                var resp = await uploadFile(title, abstract, authors, subject, file_data);
+                if (resp.status == 200) {
+                    alert("successfully uploaded - it may take a few minutes for your paper to be accepted into the blockchain.");
+                } else {
+                    alert("Upload unsuccessful. The size of your paper may be too big, please try again");
+                }
                 location.reload();
                 this.uploadProgress = 101;/*  */
                 /* var seconds = 0, dt = 1, totalUploadTime = 15 * 60, padding = 1000;
