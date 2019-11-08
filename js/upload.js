@@ -87,7 +87,8 @@ Vue.component('UploadForm', {
                 const file_data = reader.result;
                 //send arweave transaction
                 await uploadFile(title, abstract, authors, subject, file_data);
-
+                alert("successfully uploaded - it may take a few minutes for your paper to be accepted into the blockchain.")
+                location.reload();
                 this.uploadProgress = 101;/*  */
                 /* var seconds = 0, dt = 1, totalUploadTime = 15 * 60, padding = 1000;
                 var interval = setInterval(() => {

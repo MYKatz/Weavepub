@@ -39,9 +39,11 @@ Vue.component('NavigationMenu', {
                             <a class="nav-link" href="#" @click.prevent="$router.push('/upload')">Upload</a>
                         </li>
                     </ul>
-                    <div class="form-inline ml-auto" v-if="!loggedIn">
+                    <div class="form-inline ml-auto">
                         <button class="btn btn-light my-2 my-sm-0" type="button" data-toggle="modal"
-                            data-target="#exampleModal">Log in</button>
+                            data-target="#exampleModal" v-if="!loggedIn">Log in</button>
+                        <button class="btn btn-light my-2 my-sm-0" type="button"
+                         v-if="loggedIn" v-on:click="signout">Sign out</button>                      
                     </div>
                 </div>
             </nav>
@@ -55,5 +57,11 @@ Vue.component('NavigationMenu', {
     },
     mounted: function () {
         this.loggedIn = Boolean(localStorage.wallet);
+    },
+    methods: {
+        signout: function () {
+            localStorage.clear();
+            location.reload();
+        }
     }
 });
