@@ -31,7 +31,7 @@ Vue.component('homepage', {
         <!-- / Inner Wrapper -->
         </div>
         <div id="recentPapers" name="recentPapers">
-            <paper-viewer></paper-viewer>
+            <paper-viewer loadPapersFrom="recent"></paper-viewer>
         </div>
         <footer-bar></footer-bar>
     </div>

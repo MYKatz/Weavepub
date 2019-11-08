@@ -17,6 +17,7 @@ Vue.component('Paper', {
             return this.authors;
         },
         shortAbstract: function () {
+            if (!this.abstract) return '(No abstract provided)';
             return this.abstract.length >= 200 ? this.abstract.slice(0, 200) + "..." : this.abstract;
         },
         paperLink: function() {
