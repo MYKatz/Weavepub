@@ -56,6 +56,7 @@ const paperpage = Vue.component('paperpage', {
             title: null,
             authors: null,
             abstract: null,
+            owneraddr: null,
             donateAmount: 0
         }
     },
@@ -65,12 +66,12 @@ const paperpage = Vue.component('paperpage', {
             // the callback will be called immediately after the start of the observation
             immediate: true,
             handler: async function (val, oldVal) {
-                console.log(val);
                 obj = await getTagsFromId(val);
                 console.log(obj);
                 this.title = obj["title"];
                 this.authors = obj["authors"];
                 this.abstract = obj["abstract"];
+                this.owneraddr = obj["owner"];
             }
         }
     },
@@ -78,10 +79,11 @@ const paperpage = Vue.component('paperpage', {
         toggleModal: function (event) {
             $("#donateModal").modal("toggle");
         },
-        sendDonation: function (event) {
-            console.log(this.donateAmount);
+        sendDonation: async function (event) {
             if (localStorage.wallet) {
-                console.log("donating...");
+                console.log("donating...", this.donateAmount);
+                sendADonation(this.owneraddr, this.donateAmount);
+
             } else {
                 alert("Please log in first")
                 location.reload();
