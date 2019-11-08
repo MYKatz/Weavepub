@@ -49,6 +49,10 @@ Vue.component('PaperViewer', {
     },
     props: {
         hideTitle: Boolean,
+        searchQ: {
+            type: Object,
+            required: false
+        },
         title: {
             type: String,
             default: "Latest Papers"
@@ -98,6 +102,12 @@ Vue.component('PaperViewer', {
                     let mine = await getMyPapers();
                     this.papers = mine;
                 }
+            }
+        },
+        searchQ: {
+            handler: async function (newValue) {
+                console.log(newValue["queries"], newValue["types"]);
+                this.papers = await searchPapers(newValue["types"], newValue["queries"]);
             }
         }
     }

@@ -22,7 +22,7 @@ Vue.component('SingleSearchBar', {
         }
     },
     watch: {
-        initValue: function(newValue) {
+        initValue: function (newValue) {
             this.searchVal = newValue;
         }
     }
@@ -44,7 +44,7 @@ Vue.component('searchpage', {
         </div>
         <div>
             <div id="recentPapers" name="recentPapers">
-                <paper-viewer hideTitle></paper-viewer>
+                <paper-viewer hideTitle :searchQ="searchQ"></paper-viewer>
             </div>
         </div>
     </div>
@@ -58,13 +58,15 @@ Vue.component('searchpage', {
                 subject: '',
                 publisher: ''
             },
-            allSearchTypes: ['contents', 'author', 'subject', 'publisher']
+            allSearchTypes: ['contents', 'author', 'subject', 'publisher'],
+            searchQ: {}
         }
     },
     props: ['searchType', 'searchQuery'],
     mounted: function () {
         if (this.searchQuery) {
-            console.log(this.searchQuery);
+            var queries = [this.searchQuery];
+            var types = ["contents"];
         }
     },
     methods: {
@@ -76,7 +78,26 @@ Vue.component('searchpage', {
                 obj[singleFilter.searchType] = singleFilter.searchVal;
                 this.filters = obj;
             }
-            console.log("Searching with", this.filters);
+            var queries = [];
+            var types = [];
+            if (this.filters["author"]) {
+                queries.push(this.filters["author"]);
+                types.push("authors");
+            }
+            if (this.filters["contents"]) {
+                queries.push(this.filters["contents"]);
+                types.push("abstract")
+            }
+            if (this.filters["subject"]) {
+                queries.push(this.filters["subject"]);
+                types.push("subject")
+            }
+            if (this.filters["publisher"]) {
+                queries.push(this.filters["publisher"]);
+                types.push("owner")
+            }
+            var sq = { "queries": queries, "types": types };
+            this.searchQ = sq;
         }
     }
 });
