@@ -82,13 +82,8 @@ const paperpage = Vue.component('paperpage', {
         sendDonation: async function (event) {
             if (localStorage.wallet) {
                 console.log("donating...", this.donateAmount);
-                let key = JSON.parse(localStorage.wallet);
-                let transaction = arweave.createTransaction({
-                    target: this.owneraddr,
-                    quantity: arweave.ar.arToWinston(this.donateAmount.toString())
-                }, key);
-                await arweave.transactions.sign(transaction, key);
-                console.log(transaction);
+                sendADonation(this.owneraddr, this.donateAmount);
+
             } else {
                 alert("Please log in first")
                 location.reload();

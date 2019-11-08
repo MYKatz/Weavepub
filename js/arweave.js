@@ -168,3 +168,14 @@ async function uploadFile(title, abstract, authors, subject, filedata) {
     return response;
 }
 
+async function sendADonation(toaddr, amnt) {
+    let key = JSON.parse(localStorage.wallet);
+    let transaction = await arweave.createTransaction({
+        target: toaddr,
+        quantity: arweave.ar.arToWinston(amnt.toString())
+    }, key);
+    await arweave.transactions.sign(transaction, key);
+    const response = await arweave.transactions.post(transaction);
+    return response;
+}
+
