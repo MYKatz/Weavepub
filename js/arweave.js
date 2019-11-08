@@ -35,7 +35,6 @@ async function searchRecent() {
     out = [];
     for (var i = 0; i < txids.length; i++) {
         var tags = processPaperFromId(txids[i]);
-        console.log(txids[i]);
         out.push(tags);
     }
     out.sort(compare);
