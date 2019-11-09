@@ -1,4 +1,4 @@
-Public URL: https://arweave.net/BdLg67P7oS_z4aUgU8mswPk7S654RQ8M4-_yNUZjUvo
+Public URL: https://ovktcnpsxike.arweave.net/UVdcX7mWZ_CcI-FXkFqEV8L5H3lBYRzI8ljcRL1v0hE
 
 # WeavePub: a decentralized academic publishing portal, powered by Arweave!
 
