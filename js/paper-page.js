@@ -13,8 +13,8 @@ const paperpage = Vue.component('paperpage', {
                     </div> 
                 </div>
                 <div class="col-md-8">
-                    <object class="paper-pdf" v-bind:data="'http://arweave.net/' + txid" type="application/pdf">
-                        <embed v-bind:src="'http://arweave.net/' + txid" type="application/pdf" />
+                    <object class="paper-pdf" v-bind:data="'https://arweave.net/' + txid" type="application/pdf">
+                        <embed v-bind:src="'https://arweave.net/' + txid" type="application/pdf" />
                     </object>
                 </div>
             </div>
