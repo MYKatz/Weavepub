@@ -24,7 +24,7 @@ Vue.component('NavigationMenu', {
                                 <a class="dropdown-item" href="#" @click.prevent="$router.push({path: '/search/contents'})">By keywords</a>
                                 <a class="dropdown-item" href="#" @click.prevent="$router.push({path: '/search/authors'})">By author</a>
                                 <a class="dropdown-item" href="#" @click.prevent="$router.push({path: '/search/subject'})">By subject</a>
-                                <a class="dropdown-item" href="#" @click.prevent="$router.push({path: '/search/publisher'})">By publisher</a>
+                                <a class="dropdown-item" href="#" @click.prevent="$router.push({path: '/search/owner'})">By publisher</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" @click.prevent="$router.push({path: '/search/advanced'})">Advanced search</a>
                             </div>
